@@ -8,7 +8,7 @@ using GildedRoseKata;
 
 namespace GildedRoseTests
 {
-    [UseReporter(typeof(DiffReporter))]
+    [UseReporter(typeof(RiderReporter))]
     public class ApprovalTest
     {
         [Fact]
