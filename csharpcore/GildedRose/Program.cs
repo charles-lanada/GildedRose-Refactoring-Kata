@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using GildedRoseKata;
 
-namespace GildedRose
+namespace GildedRoseKata
 {
     public class Program
     {
@@ -39,7 +38,7 @@ namespace GildedRose
                 new Item { Name = "Conjured Mana Cake", SellIn = 3, Quality = 6 }
             };
 
-            var app = new global::GildedRose.GildedRose(Items);
+            var app = new GildedRose.GildedRose(Items);
 
 
             for (var i = 0; i < 31; i++)
