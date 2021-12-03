@@ -22,23 +22,27 @@ namespace GildedRose
 
         private void UpdateQualityAndSellIn(Item item)
         {
-            if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            if (item.Name == "Aged Brie")
+            {
+                if (item.Quality < 50)
+                {
+                    item.Quality++;
+                }
+            }
+            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
             {
                 if (item.Quality < 50)
                 {
                     item.Quality++;
 
-                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                    if (item.SellIn < 11)
                     {
-                        if (item.SellIn < 11)
-                        {
-                            item.Quality++;
-                        }
+                        item.Quality++;
+                    }
 
-                        if (item.SellIn < 6)
-                        {
-                            item.Quality++;
-                        }
+                    if (item.SellIn < 6)
+                    {
+                        item.Quality++;
                     }
                 }
             }
