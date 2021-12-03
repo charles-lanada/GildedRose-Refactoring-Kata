@@ -34,7 +34,7 @@ namespace GildedRoseTests
                 "unknown"
             };
             var sellIn = new [] {-1, 0, 11};
-            var quality = new [] {0, 49, 50};
+            var quality = new [] {0, 49, 50, 1, -1};
 
 
             CombinationApprovals.VerifyAllCombinations(DoUpdateQuality, name, sellIn, quality);
@@ -46,7 +46,7 @@ namespace GildedRoseTests
             {
                 new Item { Name = name, SellIn = sellIn, Quality = quality },
             };
-            var app = new GildedRose(items);
+            var app = new GildedRose.GildedRose(items);
             app.UpdateQuality();
             var result = string.Join(Environment.NewLine, app.Items);
             return result;
