@@ -22,11 +22,11 @@ namespace GildedRose
 
         private static void UpdateItem(Item item)
         {
-            (item.Quality, item.SellIn) = UpdateQualityAndSellIn(item.Name, item.Quality, item.SellIn);
-            item.SellIn = UpdateSellInNumberTwo(item.Name, item.Quality, item.SellIn);
+            (item.Quality, item.SellIn) = UpdateQualityAndSellInBeforeCheckingToReturnEarly(item.Name, item.Quality, item.SellIn);
+            item.Quality = UpdateQualityIfThereIsANeedToChangeIt(item.Name, item.Quality, item.SellIn);
         }
 
-        private static (int quality, int sellIn) UpdateQualityAndSellIn(string name, int quality, int sellIn)
+        private static (int quality, int sellIn) UpdateQualityAndSellInBeforeCheckingToReturnEarly(string name, int quality, int sellIn)
         {
             if (name == "Sulfuras, Hand of Ragnaros")
                 return (quality, sellIn);
@@ -41,14 +41,6 @@ namespace GildedRose
                     }
 
                     sellIn--;
-
-                    if (sellIn >= 0) return (quality, sellIn);
-
-                    if (quality < 50)
-                    {
-                        quality++;
-                    }
-
                     break;
                 }
                 case "Backstage passes to a TAFKAL80ETC concert":
@@ -69,10 +61,6 @@ namespace GildedRose
                     }
 
                     sellIn--;
-
-                    if (sellIn >= 0) return (quality, sellIn);
-
-                    quality = 0;
                     break;
                 }
                 default:
@@ -83,8 +71,41 @@ namespace GildedRose
                     }
 
                     sellIn--;
+                    break;
+                }
+            }
 
-                    if (sellIn >= 0) return (quality, sellIn);
+            return (quality, sellIn);
+        }
+
+        private static int UpdateQualityIfThereIsANeedToChangeIt(string name, int quality, int sellIn)
+        {
+            if (name == "Sulfuras, Hand of Ragnaros")
+                return quality;
+
+            switch (name)
+            {
+                case "Aged Brie":
+                {
+                    if (sellIn >= 0) return quality;
+
+                    if (quality < 50)
+                    {
+                        quality++;
+                    }
+
+                    break;
+                }
+                case "Backstage passes to a TAFKAL80ETC concert":
+                {
+                    if (sellIn >= 0) return quality;
+
+                    quality = 0;
+                    break;
+                }
+                default:
+                {
+                    if (sellIn >= 0) return quality;
 
                     if (quality > 0)
                     {
@@ -95,12 +116,7 @@ namespace GildedRose
                 }
             }
 
-            return (quality, sellIn);
-        }
-
-        private static int UpdateSellInNumberTwo(string name, int quality, int sellIn)
-        {
-            return sellIn;
+            return quality;
         }
     }
 }
