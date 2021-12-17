@@ -5,90 +5,102 @@ namespace GildedRose
 {
     public class GildedRose
     {
-        public IList<Item> Items;
+        public readonly IList<Item> Items;
 
-        public GildedRose(IList<Item> Items)
+        public GildedRose(IList<Item> items)
         {
-            this.Items = Items;
+            Items = items;
         }
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach (var item in Items)
             {
-                UpdateQualityAndSellIn(Items[i]);
+                UpdateItem(item);
             }
         }
 
-        private void UpdateQualityAndSellIn(Item item)
+        private static void UpdateItem(Item item)
         {
-            if (item.Name == "Aged Brie")
-            {
-                if (item.Quality < 50)
-                {
-                    item.Quality++;
-                }
-            }
-            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-            {
-                if (item.Quality < 50)
-                {
-                    item.Quality++;
+            (item.Quality, item.SellIn) = UpdateQualityAndSellIn(item.Name, item.Quality, item.SellIn);
+            item.SellIn = UpdateSellInNumberTwo(item.Name, item.Quality, item.SellIn);
+        }
 
-                    if (item.SellIn < 11)
+        private static (int quality, int sellIn) UpdateQualityAndSellIn(string name, int quality, int sellIn)
+        {
+            if (name == "Sulfuras, Hand of Ragnaros")
+                return (quality, sellIn);
+
+            switch (name)
+            {
+                case "Aged Brie":
+                {
+                    if (quality < 50)
                     {
-                        item.Quality++;
+                        quality++;
                     }
 
-                    if (item.SellIn < 6)
-                    {
-                        item.Quality++;
-                    }
-                }
-            }
-            else
-            {
-                if (item.Quality > 0)
-                {
-                    if (item.Name != "Sulfuras, Hand of Ragnaros")
-                    {
-                        item.Quality--;
-                    }
-                }
-            }
+                    sellIn--;
 
-            if (item.Name != "Sulfuras, Hand of Ragnaros")
-            {
-                item.SellIn--;
-            }
+                    if (sellIn >= 0) return (quality, sellIn);
 
-            if (item.SellIn < 0)
-            {
-                if (item.Name != "Aged Brie")
-                {
-                    if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
+                    if (quality < 50)
                     {
-                        if (item.Quality > 0)
+                        quality++;
+                    }
+
+                    break;
+                }
+                case "Backstage passes to a TAFKAL80ETC concert":
+                {
+                    if (quality < 50)
+                    {
+                        quality++;
+
+                        if (sellIn < 11)
                         {
-                            if (item.Name != "Sulfuras, Hand of Ragnaros")
+                            quality++;
+
+                            if (sellIn < 6)
                             {
-                                item.Quality--;
+                                quality++;
                             }
                         }
                     }
-                    else
-                    {
-                        item.Quality = 0;
-                    }
+
+                    sellIn--;
+
+                    if (sellIn >= 0) return (quality, sellIn);
+
+                    quality = 0;
+                    break;
                 }
-                else
+                default:
                 {
-                    if (item.Quality < 50)
+                    if (quality > 0)
                     {
-                        item.Quality++;
+                        quality--;
                     }
+
+                    sellIn--;
+
+                    if (sellIn >= 0) return (quality, sellIn);
+
+                    if (quality > 0)
+                    {
+                        quality--;
+                    }
+
+                    break;
                 }
             }
+
+            return (quality, sellIn);
+        }
+
+        private static int UpdateSellInNumberTwo(string name, int quality, int sellIn)
+        {
+            return sellIn;
         }
     }
 }
