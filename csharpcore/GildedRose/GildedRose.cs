@@ -22,15 +22,18 @@ namespace GildedRose
 
         private static void UpdateItem(Item item)
         {
-            (item.Quality, item.SellIn) = UpdateQualityAndSellInBeforeCheckingToReturnEarly(item.Name, item.Quality, item.SellIn);
+            if (item.Name == "Sulfuras, Hand of Ragnaros")
+            {
+                return;
+            }
+
+            item.Quality = UpdateQualityAndSellInBeforeCheckingToReturnEarly(item.Name, item.Quality, item.SellIn);
+            item.SellIn--;
             item.Quality = UpdateQualityIfThereIsANeedToChangeIt(item.Name, item.Quality, item.SellIn);
         }
 
-        private static (int quality, int sellIn) UpdateQualityAndSellInBeforeCheckingToReturnEarly(string name, int quality, int sellIn)
+        private static int UpdateQualityAndSellInBeforeCheckingToReturnEarly(string name, int quality, int sellIn)
         {
-            if (name == "Sulfuras, Hand of Ragnaros")
-                return (quality, sellIn);
-
             switch (name)
             {
                 case "Aged Brie":
@@ -40,7 +43,6 @@ namespace GildedRose
                         quality++;
                     }
 
-                    sellIn--;
                     break;
                 }
                 case "Backstage passes to a TAFKAL80ETC concert":
@@ -60,7 +62,6 @@ namespace GildedRose
                         }
                     }
 
-                    sellIn--;
                     break;
                 }
                 default:
@@ -70,19 +71,17 @@ namespace GildedRose
                         quality--;
                     }
 
-                    sellIn--;
                     break;
                 }
             }
 
-            return (quality, sellIn);
+            sellIn--;
+
+            return quality;
         }
 
         private static int UpdateQualityIfThereIsANeedToChangeIt(string name, int quality, int sellIn)
         {
-            if (name == "Sulfuras, Hand of Ragnaros")
-                return quality;
-
             switch (name)
             {
                 case "Aged Brie":
